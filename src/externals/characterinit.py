@@ -9,12 +9,17 @@ BOSS = [
     {
         "phase": 1, 
         "health": 100,
-        "pattern": 1,
+        "pattern": 3,
     },
     {
         "phase": 2, 
-        "health": 120,
-        "pattern": 2,
+        "health": 300,
+        "pattern": 1,
+    },
+    {
+        "phase": 3,
+        "health": 720,
+        "pattern": 2
     }
 
 ]
