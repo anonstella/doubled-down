@@ -12,9 +12,10 @@ Characters:
 Progress:
 
 - [x] - Create basic mechanics
-- [ ] - Advanced mechanics (bombs, bullet direction, etc.)
+- [x] - Advanced mechanics (bombs, bullet direction, etc.)
+- [ ] - Boss phases (Speed alteration, dialogue (?))
 - [ ] - Manipulation stuffs
-- [ ] - Music
+- [x] - Music (ill use native faith and other songs, will replace them soon.)
 - [ ] - Arts
 - [ ] - Main menu
 - [ ] - Difficulty ramps
