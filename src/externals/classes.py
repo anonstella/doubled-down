@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
-        self.image = pygame.image.load('/Volumes/Xylvera/coding/doubled-down/src/Char.png').convert_alpha()
+        self.image = pygame.image.load('src/Char.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (50, 50))
 
         self.hitbox = pygame.Rect(0, 0, 12, 12)
@@ -20,8 +20,20 @@ class Boss(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
+        # self.metadata = metadata
         self.image = pygame.Surface((150, 150))
-        self.image.fill((255, 0, 0))
+        self.image.fill((255, 255, 0))
+        # self.image.fill(metadata["colour"])
+
+        self.rect = self.image.get_rect(center=(640, 100))
+
+class Boss_Mod(pygame.sprite.Sprite):
+    def __init__(self, metadata):
+        super().__init__()
+
+        self.metadata = metadata
+        self.image = pygame.Surface((150, 150))
+        self.image.fill(metadata["colour"])
 
         self.rect = self.image.get_rect(center=(640, 100))
 
@@ -30,7 +42,7 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
 
         # self.image = pygame.Surface((20, 20))
-        self.image = pygame.image.load('/Volumes/Xylvera/coding/doubled-down/src/bullet.png').convert_alpha()
+        self.image = pygame.image.load('src/bullet.png').convert_alpha()
         # self.image.fill((120, 120, 255))
         self.image = pygame.transform.scale(self.image, (20, 20))
         self.rect = self.image.get_rect(center=(x, y))
@@ -46,8 +58,8 @@ class BossBullet(pygame.sprite.Sprite):
     def __init__(self, x, y, speed_x, speed_y):
         super().__init__()
 
-        self.image = pygame.image.load('/Volumes/Xylvera/coding/doubled-down/src/Boss bullet A.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (20, 20))
+        self.image = pygame.image.load('src/Boss bullet A.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (40, 40))
         self.rect = self.image.get_rect(center=(x, y))
 
         self.speed_x = speed_x
@@ -61,8 +73,8 @@ class BossBulletCurve(pygame.sprite.Sprite):
     def __init__(self, x, y, speed_x, speed_y, turn_speed=1):
         super().__init__()
 
-        self.image = pygame.image.load('/Volumes/Xylvera/coding/doubled-down/src/Boss bullet A.png').convert_alpha()
-        self.image = pygame.transform.scale(self.image, (20, 20))
+        self.image = pygame.image.load('src/Boss bullet A.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (40, 40))
         self.rect = self.image.get_rect(center=(x, y))
 
         self.speed_x = speed_x

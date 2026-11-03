@@ -1,5 +1,6 @@
 import pygame
 from src.externals.classes import *
+from src.externals.characterinit import *
 from src.externals.cfg import *
 import math
 
@@ -88,3 +89,38 @@ def shoot_spiral_curved(boss, bullet_amt, speed, rotation):
 
 def hitbox_collision(player, bullet):
     return player.hitbox.colliderect(bullet.rect)
+
+def boss_logic(boss, BOSS_SHOOT_DELAY, current_time, phase, rotation, boss_last_shot):
+    if current_time - boss_last_shot >= BOSS_SHOOT_DELAY:
+        # print("Starting new volley:", rotation)
+        if phase < 3: 
+            boss_ptn = BOSS[phase]["pattern"]
+            print("Current pattern:", boss_ptn)
+            if boss_ptn == 1: # Spread
+                shoot_spread(boss, 24, 360, 7)
+                # print("Shooting spread")
+            elif boss_ptn == 2: # Spiral
+                shoot_spiral(boss, 18, 5, rotation)
+                # print("Shooting spiral")
+            elif boss_ptn == 3: # Radial
+                shoot_radial(boss, 6, 3)
+                # print("Shooting radial")
+            elif boss_ptn == 4: # Spiral curved
+                shoot_spiral_curved(boss, 7, 5, rotation)
+                rotation = (rotation + 15) % 360
+                # print("Shooting spiral (curved)")
+            else:
+                return "illegal!"
+        
+        # print("Boss bullet group size: ", len(active_boss_bullets))
+        boss_last_shot = current_time
+
+    return rotation, boss_last_shot
+
+def remove_offscreen_bullets(active_bullets, active_boss_bullets):
+    screen_rect = pygame.display.get_surface().get_rect()
+
+    for group in (active_bullets, active_boss_bullets):
+        for bullet in group:
+            if not screen_rect.colliderect(bullet.rect):
+                bullet.kill()

@@ -4,12 +4,12 @@ Concept: A game where you have to dodge incoming drone attacks. Use your dodging
 
 Inspiration: Touhou franchise
 
-Characters:
+## [Deprecated] Characters:
 - Torimiya - Starter character | Protagonist
 - Sekishin - Starter boss | Antagonist
 
 
-Progress:
+## Progress (40% Done!):
 
 - [x] - Create basic mechanics
 - [x] - Advanced mechanics (bombs, bullet direction, etc.)
