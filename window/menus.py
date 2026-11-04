@@ -1,0 +1,65 @@
+import pygame
+from src.externals.cfg import *
+
+pygame.init()
+
+font = pygame.font.Font('window/THBiolinum.otf', 50)
+font_title = pygame.font.Font('window/THBiolinum.otf', 80)
+
+title = font_title.render('Touhou: Doubled Down', True, colour["white"])
+
+play = font.render('Play', True, colour["white"])
+# options = font.render('Options', True, colour["white"])
+quit_opt = font.render('Quit', True, colour["white"])
+
+title_rect = title.get_rect()
+title_rect.topleft = (30, 20)
+
+play_rect = play.get_rect()
+play_rect.topleft = (80, 250)
+# options_rect = options.get_rect()
+# options_rect.topleft = (80, 350)
+quit_rect = quit_opt.get_rect()
+quit_rect.topleft = (80, 350)
+
+retry = font.render('Try again', True, colour["white"])
+menu = font.render('Main Menu', True, colour["white"])
+
+retry_rect = retry.get_rect()
+retry_rect.center = ((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2))
+
+menu_rect = menu.get_rect()
+menu_rect.center = ((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) + 100)
+
+sel = font.render('<', True, colour["white"])
+
+sel_rect = sel.get_rect()
+
+def main_menu(window):
+    window.blit(title, title_rect)
+    window.blit(play, play_rect)
+    window.blit(quit_opt, quit_rect)
+    window.blit(sel, sel_rect)
+
+def gameover(window):
+    pygame.display.set_caption("Game over!")
+    window.blit(game_over, game_rect)
+    window.blit(retry, retry_rect)
+    window.blit(menu, menu_rect)
+    window.blit(sel, sel_rect)
+
+def draw_selmain(opt):
+    if opt == 1:
+        # sel_rect.topleft = (220, 350)
+        sel_rect.topleft = (170, 350)
+    # elif opt == 2:
+    #     sel_rect.topleft = (170, 450)
+
+    else:
+        sel_rect.topleft = (170, 250)
+        
+def draw_selover(opt):
+    if opt == 0:
+        sel_rect.center = ((SCREEN_WIDTH / 2) + 150, (SCREEN_HEIGHT / 2))
+    else:
+        sel_rect.center = ((SCREEN_WIDTH / 2) + 150, (SCREEN_HEIGHT / 2) + 100)

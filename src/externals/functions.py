@@ -3,6 +3,16 @@ from src.externals.classes import *
 from src.externals.characterinit import *
 from src.externals.cfg import *
 import math
+import json
+
+# def settings_load():
+#     with open('src/settings.json', 'r') as f:
+#         data = json.load(f)
+
+#     return data
+
+# def apply_settings():
+#     with open('src/settings.json', 'w') as f:
 
 def check_borders(player):
     if player.rect.y >= 630:
@@ -93,7 +103,7 @@ def hitbox_collision(player, bullet):
 def boss_logic(boss, BOSS_SHOOT_DELAY, current_time, phase, rotation, boss_last_shot):
     if current_time - boss_last_shot >= BOSS_SHOOT_DELAY:
         # print("Starting new volley:", rotation)
-        if phase < 3: 
+        if phase < len(BOSS): 
             boss_ptn = BOSS[phase]["pattern"]
             print("Current pattern:", boss_ptn)
             if boss_ptn == 1: # Spread
@@ -124,3 +134,16 @@ def remove_offscreen_bullets(active_bullets, active_boss_bullets):
         for bullet in group:
             if not screen_rect.colliderect(bullet.rect):
                 bullet.kill()
+
+
+def music_handler(state):
+    desired_music = None
+    if state == 0: # Main menu
+        desired_music = MUSIC_QUEUE["menu"]
+    elif state == 1: # Main game
+        desired_music = MUSIC_QUEUE["game"]
+    elif state == 2:
+        desired_music = MUSIC_QUEUE["game_over"]
+    elif state == 3:
+        desired_music = MUSIC_QUEUE["victory"]
+    return desired_music

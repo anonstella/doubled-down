@@ -1,22 +1,21 @@
 # Game idea: Touhou: Doubled Down
-Concept: A game where you have to dodge incoming drone attacks. Use your dodging skills to evade the bullets! This is a special version of Touhou, as it is lightweight and art assets are minimal.
+Concept: A fanmade touhou game where you have to dodge incoming bullet attacks. Use your dodging skills to evade the bullets! This is a special version of Touhou, as it is lightweight and art assets are minimal (as this is my first pygame game!).
 
 
 Inspiration: Touhou franchise
 
-## [Deprecated] Characters:
-- Torimiya - Starter character | Protagonist
-- Sekishin - Starter boss | Antagonist
+## Progress (71.4% Done!):
 
-
-## Progress (40% Done!):
-
-- [x] - Create basic mechanics
-- [x] - Advanced mechanics (bombs, bullet direction, etc.)
-- [ ] - Boss phases (Speed alteration, dialogue (?))
-- [ ] - Manipulation stuffs
-- [x] - Music (ill use native faith and other songs, will replace them soon.)
+- [X] - Create basic mechanics
+- [X] - Advanced mechanics (bombs, bullet direction, etc.)
+- [X] - Boss phases (patterns~~Speed alteration, dialogue (?)~~)
+- ~~[ ] - Manipulation stuffs~~
+- [X] - Music (ill use native faith and other songs, will try to replace them if I can.)
 - [ ] - Arts
-- [ ] - Main menu
-- [ ] - Difficulty ramps
-- [ ] - More bosses
+- [X] - Menus
+- [ ] - Score mechanics (soon)
+- ~~[ ] - Difficulty selector~~
+- ~~[ ] - More bosses~~
+
+## Credits
+- ZUN / Team Shanghai Alice - Music & SFX (Native faith, boss death sfx, death sfx, etc.)

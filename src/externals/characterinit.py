@@ -6,10 +6,9 @@ PLR = {
 }
 
 BOSS = [
+    # Boss A : Sekishin
     {
-        # "phase": 1, 
         "health": 1000,
-        # "health": 100,
         "pattern": 4,
         "colour": (255, 255, 0)
     },
@@ -26,8 +25,60 @@ BOSS = [
         # "health": 200,
         "pattern": 2,
         "colour": (0, 255, 255)
-    }
+    },
 
+    # Boss 2: Gakuno
+    {
+        "health": 2300,
+        "pattern": 4,
+        "colour": (160, 255, 120)
+    },
+    {
+        "health": 2540,
+        "pattern": 3,
+        "colour": (111, 111, 255)
+    },
+    {
+        "health": 3000,
+        "pattern": 1,
+        "colour": (111, 111, 255)
+    },
+
+
+]
+
+drops = [
+    # by phase
+    {
+        "stars": 0,
+        "points": 40,
+        "bombs": 1
+    },
+    {
+        "stars": 1,
+        "points": 60,
+        "bombs": 0
+    },
+    {
+        "stars": 0,
+        "points": 80,
+        "bombs": 0
+    },
+    {
+        "stars": 1,
+        "points": 100,
+        "bombs": 0
+    },
+    {
+        "stars": 0,
+        "points": 120,
+        "bombs": 1
+    },
+    {
+        "stars": 1,
+        "points": 140,
+        "bombs": 0
+    },
 ]
 
 # Patterns:
