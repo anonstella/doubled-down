@@ -2,7 +2,8 @@ PLR = {
     "lives": 5,
     "bombs": 3,
     "stars": 0,
-    "boss_beaten": 0
+    "boss_beaten": 0,
+    "score": 0
 }
 
 BOSS = [
@@ -10,38 +11,44 @@ BOSS = [
     {
         "health": 1000,
         "pattern": 4,
-        "colour": (255, 255, 0)
+        # "colour": (255, 255, 0),
+        "decals": 'src/Rinnosuke Morichika.png'
     },
     {
         # "phase": 2, 
         "health": 1450,
         # "health": 145,
         "pattern": 1,
-        "colour": (255, 0, 255)
+        # "colour": (255, 0, 255)
+        "decals": 'src/Rinnosuke Morichika.png'
     },
     {
         # "phase": 3,
         "health": 2000,
         # "health": 200,
         "pattern": 2,
-        "colour": (0, 255, 255)
+        "decals": 'src/Rinnosuke Morichika.png'
+        # "colour": (0, 255, 255),
     },
 
     # Boss 2: Gakuno
     {
         "health": 2300,
         "pattern": 4,
-        "colour": (160, 255, 120)
+        # "colour": (160, 255, 120)
+        "decals": 'src/Fortune Teller.png'
     },
     {
         "health": 2540,
         "pattern": 3,
-        "colour": (111, 111, 255)
+        # "colour": (111, 111, 255)
+        "decals": 'src/Fortune Teller.png'
     },
     {
         "health": 3000,
         "pattern": 1,
-        "colour": (111, 111, 255)
+        # "colour": (111, 111, 255)
+        "decals": 'src/Fortune Teller.png'
     },
 
 

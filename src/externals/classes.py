@@ -22,7 +22,9 @@ class Boss(pygame.sprite.Sprite):
 
         # self.metadata = metadata
         self.image = pygame.Surface((150, 150))
-        self.image.fill((255, 255, 0))
+        # self.image = pygame.image.load('src/messi.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (150, 150))
+        # self.image.fill((255, 255, 0))
         # self.image.fill(metadata["colour"])
 
         self.rect = self.image.get_rect(center=(640, 100))
@@ -32,8 +34,10 @@ class Boss_Mod(pygame.sprite.Sprite):
         super().__init__()
 
         self.metadata = metadata
-        self.image = pygame.Surface((150, 150))
-        self.image.fill(metadata["colour"])
+        # self.image = pygame.Surface((150, 150))
+        self.image = pygame.image.load(metadata['decals'])
+        self.image = pygame.transform.scale(self.image, (128, 128))
+        # self.image.fill(metadata["colour"])
 
         self.rect = self.image.get_rect(center=(640, 100))
 
@@ -123,3 +127,36 @@ class Bomb(pygame.sprite.Sprite):
         # End bomb
         if current_time - self.start_time >= self.duration:
             self.kill()
+
+class Points(pygame.sprite.Sprite):
+    def __init__(self, x, y, vel_x, vel_y):
+        super().__init__()
+        self.image = pygame.image.load('src/points.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (20, 20))
+        self.x = x
+        self.y = y
+
+        self.rect = self.image.get_rect(center=(x, y))
+
+
+        self.vel_x = vel_x
+        self.vel_y = vel_y
+
+    def home_to_player(self, player):
+        dx = player.rect.centerx - self.rect.centerx
+        dy = player.rect.centery - self.rect.centery
+
+        distance = math.hypot(dx, dy)
+
+        if distance < 10:
+            PLR["score"] += 12500
+            self.kill()
+            return
+
+        speed = 12
+        self.rect.x += (dx / distance) * speed
+        self.rect.y += (dy / distance) * speed
+
+    def update(self):
+        self.rect.x += self.vel_x
+        self.rect.y += self.vel_y

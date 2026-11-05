@@ -4,6 +4,7 @@ from src.externals.characterinit import *
 from src.externals.cfg import *
 import math
 import json
+import random
 
 # def settings_load():
 #     with open('src/settings.json', 'r') as f:
@@ -130,10 +131,10 @@ def boss_logic(boss, BOSS_SHOOT_DELAY, current_time, phase, rotation, boss_last_
 def remove_offscreen_bullets(active_bullets, active_boss_bullets):
     screen_rect = pygame.display.get_surface().get_rect()
 
-    for group in (active_bullets, active_boss_bullets):
-        for bullet in group:
-            if not screen_rect.colliderect(bullet.rect):
-                bullet.kill()
+    for group in (active_bullets, active_boss_bullets, active_drops):
+        for items in group:
+            if not screen_rect.colliderect(items.rect):
+                items.kill()
 
 
 def music_handler(state):
@@ -147,3 +148,24 @@ def music_handler(state):
     elif state == 3:
         desired_music = MUSIC_QUEUE["victory"]
     return desired_music
+
+def summon_drops(phase):
+    print(drops[phase]["points"])
+    for _ in range(drops[phase]["points"]):
+        dropvel = 2.5
+        pts = Points(
+            random.randint(70, SCREEN_WIDTH - 100),
+            random.randint(30, int(SCREEN_HEIGHT / 3)),
+            # random.randint(0, SCREEN_HEIGHT),
+            0,
+            dropvel
+        )
+
+        active_drops.add(pts)
+
+def drop_collision(player, drops):
+    return player.hitbox.colliderect(drops.rect)
+
+def add_pts():
+    PLR["score"] += 12500
+

@@ -4,18 +4,19 @@ Concept: A fanmade touhou game where you have to dodge incoming bullet attacks. 
 
 Inspiration: Touhou franchise
 
-## Progress (71.4% Done!):
+## Progress (100% Done! Just random stuffs being added now):
 
 - [X] - Create basic mechanics
 - [X] - Advanced mechanics (bombs, bullet direction, etc.)
 - [X] - Boss phases (patterns~~Speed alteration, dialogue (?)~~)
 - ~~[ ] - Manipulation stuffs~~
 - [X] - Music (ill use native faith and other songs, will try to replace them if I can.)
-- [ ] - Arts
+- [X] - Arts
 - [X] - Menus
-- [ ] - Score mechanics (soon)
+- [X] - Score mechanics
 - ~~[ ] - Difficulty selector~~
 - ~~[ ] - More bosses~~
 
 ## Credits
 - ZUN / Team Shanghai Alice - Music & SFX (Native faith, boss death sfx, death sfx, etc.)
+- reale_ly - character decals, can be found [here](https://reale-ly.itch.io/touhou-mini-pack)
