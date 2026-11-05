@@ -3,7 +3,7 @@ from src.externals.cfg import *
 
 pygame.init()
 
-font = pygame.font.Font('window/THBiolinum.otf', 50)
+
 font_title = pygame.font.Font('window/THBiolinum.otf', 80)
 
 title = font_title.render('Touhou: Doubled Down', True, colour["white"])

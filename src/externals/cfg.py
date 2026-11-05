@@ -1,10 +1,13 @@
 import pygame
+from src.externals.characterinit import *
+
 pygame.mixer.init()
 pygame.init()
 # current_time = pygame.time.get_ticks()
 active_bullets = pygame.sprite.Group()
 active_boss_bullets = pygame.sprite.Group()
 active_bombs = pygame.sprite.Group()
+active_drops = pygame.sprite.Group()
 
 BOMB_DURATION = 4000
 
@@ -46,13 +49,17 @@ FPS = 120
 
 # Fonts
 
-font = pygame.font.Font(None, 50)
+font = pygame.font.Font('window/THBiolinum.otf', 50)
 
-level = font.render("Level: Front gate", True, color=(255, 255, 255))
-game_over = font.render("Game Over.", True, color=(255, 255, 255))
-game_done = font.render("You win!", True, color=(255, 255, 255))
+level = font.render("Level: Front gate", True, colour["white"])
+game_over = font.render("Game Over.", True, colour["white"])
+game_done = font.render("You win!", True, colour["white"])
 
 level_rect = level.get_rect()
 level_rect.topleft = (0, 0)
 game_rect = game_over.get_rect()
 game_rect.center = ((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 200)
+
+es = font.render(f"Final score: {PLR["score"]} pts", True, colour["white"])
+es_rect = es.get_rect()
+es_rect.center = ((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 100)

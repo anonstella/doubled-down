@@ -18,7 +18,7 @@ pygame.mixer.init()
 
 
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Doubled Down - ver. 1.2")
+pygame.display.set_caption("Doubled Down - ver. 1.3")
 clock = pygame.time.Clock()
 
 menu_opt, over_opt, vic_opt = 0, 0, 0
@@ -44,11 +44,12 @@ player.rect.clamp_ip(screen_rect)
 rotation, phase, last_phase_change = 0, 0, 0
 PHASE_PERIOD = 3000 # ms
 transition_start = 0
-phase_trans = False
+phase_trans, summoned = False, False
 
 current_music = None
 
 boss = Boss_Mod(BOSS[phase])
+# boss = Boss()
 
 def reset_game():
     global phase, rotation, phase_trans
@@ -57,6 +58,7 @@ def reset_game():
     PLR["lives"] = 5
     PLR["bombs"] = 3
     PLR["stars"] = 0
+    PLR["score"] = 0
 
     phase = 0
     rotation = 0
@@ -73,6 +75,7 @@ def reset_game():
         boss_data["health"] = [1000, 1450, 2000, 2300, 2540, 3000][i]
 
 while True:
+    print(PLR["score"])
     current_time = get_current_time()
     # fix players vel to 0 every frame with no keyboard input.
     player_vel_x = 0
@@ -104,9 +107,11 @@ while True:
         if keys[pygame.K_z]:
             if current_time - last_shot >= BULLET_DELAY:
                 bullet_straight = Bullet(player.rect.centerx, player.rect.top, speed_x=0, speed_y=-20)
-                bullet_left = Bullet(player.rect.centerx, player.rect.top, speed_x=3, speed_y=-20)
-                bullet_right = Bullet(player.rect.centerx, player.rect.top, speed_x=-3, speed_y=-20)
-                active_bullets.add(bullet_straight, bullet_left, bullet_right)
+                bullet_leftmost = Bullet(player.rect.centerx - 30, player.rect.top, speed_x=0, speed_y=-20)
+                bullet_left = Bullet(player.rect.centerx - 15, player.rect.top, speed_x=0, speed_y=-20)
+                bullet_right = Bullet(player.rect.centerx + 15, player.rect.top, speed_x=-0, speed_y=-20)
+                bullet_rightmost = Bullet(player.rect.centerx + 30, player.rect.top, speed_x=-0, speed_y=-20)
+                active_bullets.add(bullet_straight, bullet_left, bullet_right, bullet_leftmost, bullet_rightmost)
                 shoot.play()
                 last_shot = current_time
 
@@ -126,6 +131,10 @@ while True:
 
             immunity_latest = current_time
 
+    # points handler
+    if pygame.sprite.spritecollide(player, active_drops, True, collided=drop_collision):
+        PLR["score"] += 12500
+
     if phase < len(BOSS) and game_state == 1:
         if BOSS[phase]["health"] < 1 and not phase_trans:
             phase_trans = True
@@ -137,7 +146,10 @@ while True:
 
     if phase >= len(BOSS) - 1:
         game_state = 3
-      
+    if player.rect.y <= 250: # Player on collect zone
+        for item in active_drops:
+            item.home_to_player(player)
+    
     # Event handler
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -179,6 +191,7 @@ while True:
                     if over_opt == 1:
                         game_state = 0
                     else:
+                        reset_game()
                         game_state = 1
 
     active_bullets.update()
@@ -203,13 +216,21 @@ while True:
         if bossbullet.rect.bottom < 0 or bossbullet.rect.top > SCREEN_HEIGHT:
             bossbullet.kill()
 
+    
     if phase_trans:
+        if not summoned:
+            summon_drops(phase)
+            summoned = True
+        else:
+            pass
         if current_time - transition_start >= PHASE_PERIOD:
             if phase < len(BOSS):
                 BOSS[phase]["health"] = 0
                 phase += 1
+                boss = Boss_Mod(BOSS[phase])
                 phase_trans = False
                 boss_last_shot = current_time
+                summoned = False
             else:
                 pass
 
@@ -229,6 +250,9 @@ while True:
         stars = font.render(f"Stars: {PLR["stars"]}", True, (255, 255, 255))
         stars_rect = stars.get_rect()
         stars_rect.topleft = (0, 240)
+        score = font.render(f"Score: {PLR["score"]}", True, colour["white"])
+        scores_rect = score.get_rect()
+        scores_rect.topleft = (0, 300)
         player.rect.x += player_vel_x
         player.rect.y += player_vel_y
 
@@ -240,15 +264,20 @@ while True:
         window.blit(player.image, player.rect)
         pygame.draw.rect(window, (0, 255, 0), player.hitbox, 1)
         window.blit(level, level_rect)
+        window.blit(score, scores_rect)
         window.blit(bhealth, bhealth_rect)
         window.blit(bombs_left, bombs_rect)
         window.blit(stars, stars_rect)
         window.blit(lives, lives_rect)
     
     elif game_state == 2:
+        es = font.render(f"Final score: {PLR["score"]} pts", True, colour["white"])
+        es_rect = es.get_rect()
+        es_rect.center = ((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 100)
+        window.blit(es, es_rect)
         gameover(window)
         draw_selover(over_opt)
-        reset_game()
+        
     
     elif game_state == 3:
         pygame.display.set_caption("You win!")
@@ -258,6 +287,8 @@ while True:
     remove_offscreen_bullets(active_bullets, active_boss_bullets)
     active_bullets.draw(window)
     active_bombs.draw(window)
+    active_drops.draw(window)
+    active_drops.update()
     active_boss_bullets.draw(window)
     active_bombs.update()
     player.update()
