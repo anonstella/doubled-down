@@ -21,3 +21,6 @@ Progress:
 - [ ] - Main menu
 - [ ] - Difficulty ramps
 - [ ] - More bosses
+
+# Coding goal
+- Reach 17 hours so I get both tablet and dino diny!

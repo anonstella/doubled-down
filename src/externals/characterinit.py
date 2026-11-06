@@ -3,8 +3,17 @@ PLR = {
     "bombs": 3,
     "stars": 0,
     "boss_beaten": 0,
-    "score": 0
+    "score": 0,
+    "firepower_addition": 0
 }
+
+VEL_MILESTONE = [
+    0,
+    4,
+    12,
+    24,
+    60
+]
 
 BOSS = [
     # Boss A : Sekishin
@@ -59,32 +68,44 @@ drops = [
     {
         "stars": 0,
         "points": 40,
-        "bombs": 1
+        "firepower": 10,
+        "bombs": 1,
+        "lives": 0
     },
     {
         "stars": 1,
         "points": 60,
-        "bombs": 0
+        "firepower": 15,
+        "bombs": 0,
+        "lives": 0
     },
     {
         "stars": 0,
         "points": 80,
-        "bombs": 0
+        "firepower": 20,
+        "bombs": 0,
+        "lives": 1
     },
     {
         "stars": 1,
         "points": 100,
-        "bombs": 0
+        "firepower": 25,
+        "bombs": 0,
+        "lives": 1
     },
     {
         "stars": 0,
         "points": 120,
-        "bombs": 1
+        "firepower": 20,
+        "bombs": 1,
+        "lives": 0
     },
     {
         "stars": 1,
         "points": 140,
-        "bombs": 0
+        "firepower": 32,
+        "bombs": 0,
+        "lives": 0
     },
 ]
 

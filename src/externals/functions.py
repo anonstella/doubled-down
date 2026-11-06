@@ -128,10 +128,10 @@ def boss_logic(boss, BOSS_SHOOT_DELAY, current_time, phase, rotation, boss_last_
 
     return rotation, boss_last_shot
 
-def remove_offscreen_bullets(active_bullets, active_boss_bullets):
+def remove_offscreen_bullets(active_bullets, active_boss_bullets, active_drops, active_fp_drops, active_lv_drops):
     screen_rect = pygame.display.get_surface().get_rect()
 
-    for group in (active_bullets, active_boss_bullets, active_drops):
+    for group in (active_bullets, active_boss_bullets, active_drops, active_fp_drops, active_lv_drops):
         for items in group:
             if not screen_rect.colliderect(items.rect):
                 items.kill()
@@ -150,9 +150,9 @@ def music_handler(state):
     return desired_music
 
 def summon_drops(phase):
-    print(drops[phase]["points"])
+    # print(drops[phase]["points"])
+    dropvel = 2.5
     for _ in range(drops[phase]["points"]):
-        dropvel = 2.5
         pts = Points(
             random.randint(70, SCREEN_WIDTH - 100),
             random.randint(30, int(SCREEN_HEIGHT / 3)),
@@ -160,12 +160,55 @@ def summon_drops(phase):
             0,
             dropvel
         )
-
         active_drops.add(pts)
+
+        # clone of pts, just for firepower (easy implementation XD)
+    
+    for _ in range(drops[phase]["firepower"]):
+        fp = Firepower(
+            random.randint(70, SCREEN_WIDTH - 100),
+            random.randint(30, int(SCREEN_HEIGHT / 3)),
+            # random.randint(0, SCREEN_HEIGHT),
+            0,
+            dropvel
+        )
+
+        active_fp_drops.add(fp)
+    
+    for _ in range(drops[phase]["lives"]):
+        lv = Lives(
+            random.randint(70, SCREEN_WIDTH - 100),
+            random.randint(30, int(SCREEN_HEIGHT / 3)),
+            # random.randint(0, SCREEN_HEIGHT),
+            0,
+            dropvel
+        )
+
+        active_lv_drops.add(lv)
 
 def drop_collision(player, drops):
     return player.hitbox.colliderect(drops.rect)
 
-def add_pts():
-    PLR["score"] += 12500
+def update_firepower(current):
+    active_milestone = 0
+    for milestone in VEL_MILESTONE:
+        if PLR["firepower_addition"] >= milestone:
+            active_milestone = milestone
 
+    max_mile = VEL_MILESTONE[-1]
+    min_delay = 2 # as in 2 frames per bullet being the max to prevent raging bullets
+
+    prog = active_milestone / max_mile if max_mile > 0 else 0 # progress from 0.0 to 1.0
+
+    reduction = current - min_delay
+
+    new_delay = current - (reduction * prog)
+    return int(round(new_delay)) # returns an int cuz pygame can't digest a float
+
+def bullet_formation(player):
+    bullet_straight = Bullet(player.rect.centerx, player.rect.top, speed_x=0, speed_y=-20)
+    bullet_leftmost = Bullet(player.rect.centerx - 40, player.rect.top + 15, speed_x=0, speed_y=-20)
+    bullet_left = Bullet(player.rect.centerx - 25, player.rect.top, speed_x=0, speed_y=-20)
+    bullet_right = Bullet(player.rect.centerx + 25, player.rect.top, speed_x=-0, speed_y=-20)
+    bullet_rightmost = Bullet(player.rect.centerx + 40, player.rect.top + 15, speed_x=-0, speed_y=-20)
+    return bullet_straight, bullet_left, bullet_right, bullet_leftmost, bullet_rightmost

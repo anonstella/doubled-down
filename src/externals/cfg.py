@@ -8,6 +8,10 @@ active_bullets = pygame.sprite.Group()
 active_boss_bullets = pygame.sprite.Group()
 active_bombs = pygame.sprite.Group()
 active_drops = pygame.sprite.Group()
+active_fp_drops = pygame.sprite.Group()
+active_lv_drops = pygame.sprite.Group()
+
+version = 1.4
 
 BOMB_DURATION = 4000
 

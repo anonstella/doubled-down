@@ -46,9 +46,9 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
 
         # self.image = pygame.Surface((20, 20))
-        self.image = pygame.image.load('src/bullet.png').convert_alpha()
+        self.image = pygame.image.load('src/Bullet (1).png').convert_alpha()
         # self.image.fill((120, 120, 255))
-        self.image = pygame.transform.scale(self.image, (20, 20))
+        self.image = pygame.transform.scale(self.image, (10, 50))
         self.rect = self.image.get_rect(center=(x, y))
 
         self.speed_x = speed_x
@@ -150,6 +150,73 @@ class Points(pygame.sprite.Sprite):
 
         if distance < 10:
             PLR["score"] += 12500
+            self.kill()
+            return
+
+        speed = 12
+        self.rect.x += (dx / distance) * speed
+        self.rect.y += (dy / distance) * speed
+
+    def update(self):
+        self.rect.x += self.vel_x
+        self.rect.y += self.vel_y
+
+class Lives(pygame.sprite.Sprite):
+    def __init__(self, x, y, vel_x, vel_y):
+        super().__init__()
+        self.image = pygame.image.load('src/lives.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (20, 20))
+        self.x = x
+        self.y = y
+
+        self.rect = self.image.get_rect(center=(x, y))
+
+
+        self.vel_x = vel_x
+        self.vel_y = vel_y
+
+    def home_to_player(self, player):
+        dx = player.rect.centerx - self.rect.centerx
+        dy = player.rect.centery - self.rect.centery
+
+        distance = math.hypot(dx, dy)
+
+        if distance < 10:
+            PLR["lives"] += 1
+            self.kill()
+            return
+
+        speed = 12
+        self.rect.x += (dx / distance) * speed
+        self.rect.y += (dy / distance) * speed
+
+    def update(self):
+        self.rect.x += self.vel_x
+        self.rect.y += self.vel_y
+
+
+class Firepower(pygame.sprite.Sprite):
+    def __init__(self, x, y, vel_x, vel_y):
+        super().__init__()
+        self.image = pygame.image.load('src/Firepower_upgrade.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (20, 20))
+        self.x = x
+        self.y = y
+
+        self.rect = self.image.get_rect(center=(x, y))
+
+
+        self.vel_x = vel_x
+        self.vel_y = vel_y
+
+    def home_to_player(self, player):
+        dx = player.rect.centerx - self.rect.centerx
+        dy = player.rect.centery - self.rect.centery
+
+        distance = math.hypot(dx, dy)
+
+        if distance < 10:
+            PLR["firepower_addition"] += 1
             self.kill()
             return
 
