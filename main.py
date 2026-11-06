@@ -18,12 +18,12 @@ pygame.mixer.init()
 
 
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Doubled Down - ver. 1.3")
+pygame.display.set_caption("東方: Doubled Down - ver. {}".format(version))
 clock = pygame.time.Clock()
 
 menu_opt, over_opt, vic_opt = 0, 0, 0
 
-game_state = 0
+game_state = 3
 
 player_x = 0
 player_y = 0
@@ -33,7 +33,8 @@ player_vel_y = 0
 player = Player()
 
 # Player's bullet
-BULLET_DELAY, BOSS_SHOOT_DELAY, IMMUNITY_PERIOD = 14, 240, 1500 # milliseconds
+BASE_BULLET_DELAY, BOSS_SHOOT_DELAY, IMMUNITY_PERIOD = 14, 240, 1500 # milliseconds
+BULLET_DELAY = BASE_BULLET_DELAY
 last_shot, boss_last_shot, immunity_latest = 0, 0, 0
 
 player_vel = 5
@@ -51,7 +52,7 @@ current_music = None
 boss = Boss_Mod(BOSS[phase])
 # boss = Boss()
 
-def reset_game():
+def reset_game(): # resets stuff
     global phase, rotation, phase_trans
     global boss_last_shot, last_shot, immunity_latest
 
@@ -72,16 +73,22 @@ def reset_game():
         group.empty()
 
     for i, boss_data in enumerate(BOSS):
-        boss_data["health"] = [1000, 1450, 2000, 2300, 2540, 3000][i]
+        boss_data["health"] = [1000, 1450, 2000, 2300, 2540, 3000][i] # This is kinda bad coding practice, cuz if more phases are added, then this is kinda impractical.
 
 while True:
-    print(PLR["score"])
+    # print(PLR["score"])
     current_time = get_current_time()
     # fix players vel to 0 every frame with no keyboard input.
     player_vel_x = 0
     player_vel_y = 0
 
     player_vel = 5
+
+
+    # firepower update (ver. 1.4)
+    BULLET_DELAY = update_firepower(BASE_BULLET_DELAY)
+    # print(BULLET_DELAY)
+    print(PLR["score"], PLR["firepower_addition"], BULLET_DELAY)
 
     # Border check
     keys = pygame.key.get_pressed()
@@ -106,12 +113,8 @@ while True:
         # Shoot
         if keys[pygame.K_z]:
             if current_time - last_shot >= BULLET_DELAY:
-                bullet_straight = Bullet(player.rect.centerx, player.rect.top, speed_x=0, speed_y=-20)
-                bullet_leftmost = Bullet(player.rect.centerx - 30, player.rect.top, speed_x=0, speed_y=-20)
-                bullet_left = Bullet(player.rect.centerx - 15, player.rect.top, speed_x=0, speed_y=-20)
-                bullet_right = Bullet(player.rect.centerx + 15, player.rect.top, speed_x=-0, speed_y=-20)
-                bullet_rightmost = Bullet(player.rect.centerx + 30, player.rect.top, speed_x=-0, speed_y=-20)
-                active_bullets.add(bullet_straight, bullet_left, bullet_right, bullet_leftmost, bullet_rightmost)
+                straight, left, right, leftm, rightm = bullet_formation(player)
+                active_bullets.add(straight, left, right, leftm, rightm)
                 shoot.play()
                 last_shot = current_time
 
@@ -135,6 +138,14 @@ while True:
     if pygame.sprite.spritecollide(player, active_drops, True, collided=drop_collision):
         PLR["score"] += 12500
 
+    # fp handler
+    if pygame.sprite.spritecollide(player, active_fp_drops, True, collided=drop_collision):
+        PLR["firepower_addition"] += 1
+   
+    # lv handler
+    if pygame.sprite.spritecollide(player, active_fp_drops, True, collided=drop_collision):
+        PLR["lives"] += 1
+
     if phase < len(BOSS) and game_state == 1:
         if BOSS[phase]["health"] < 1 and not phase_trans:
             phase_trans = True
@@ -148,6 +159,10 @@ while True:
         game_state = 3
     if player.rect.y <= 250: # Player on collect zone
         for item in active_drops:
+            item.home_to_player(player)
+        for item in active_fp_drops:
+            item.home_to_player(player)
+        for item in active_lv_drops:
             item.home_to_player(player)
     
     # Event handler
@@ -194,6 +209,20 @@ while True:
                         reset_game()
                         game_state = 1
 
+            if game_state == 3:
+                if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
+                    if vic_opt == 1:
+                        vic_opt = 0
+                    else:
+                        vic_opt = 1
+
+                if event.key == pygame.K_z:
+                    if vic_opt == 0:
+                        reset_game()
+                        game_state = 1
+                    else:
+                        game_state = 0
+
     active_bullets.update()
 
     desired_music = music_handler(game_state)
@@ -235,9 +264,11 @@ while True:
                 pass
 
     if game_state == 0: # Main menu
+        pygame.display.set_caption("東方: Doubled Down - ver. {}".format(version))
         main_menu(window)
         draw_selmain(menu_opt)
     if game_state == 1:
+        pygame.display.set_caption("東方: Doubled Down - Game phase")
         lives = font.render(f"Lives: {PLR["lives"]}", True, (255, 255, 255))
         lives_rect = lives.get_rect()
         lives_rect.topleft = (0, 60)
@@ -280,15 +311,27 @@ while True:
         
     
     elif game_state == 3:
-        pygame.display.set_caption("You win!")
-        window.blit(game_done, game_rect)
+        es = font.render(f"Final score: {PLR["score"]} pts", True, colour["white"])
+        es_rect = es.get_rect()
+        es_rect.center = ((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 100)
+        window.blit(es, es_rect)
+        victory(window)
+        draw_selwon(vic_opt)
+
+    elif game_state == 4: # settings page
+        pass
+        
 
     active_boss_bullets.update()
-    remove_offscreen_bullets(active_bullets, active_boss_bullets)
+    remove_offscreen_bullets(active_bullets, active_boss_bullets, active_drops, active_fp_drops, active_lv_drops)
     active_bullets.draw(window)
     active_bombs.draw(window)
     active_drops.draw(window)
     active_drops.update()
+    active_fp_drops.draw(window)
+    active_fp_drops.update()
+    active_lv_drops.draw(window)
+    active_lv_drops.update()
     active_boss_bullets.draw(window)
     active_bombs.update()
     player.update()

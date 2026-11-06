@@ -14,9 +14,12 @@ Inspiration: Touhou franchise
 - [X] - Arts
 - [X] - Menus
 - [X] - Score mechanics
+- [X] - Other powerups (firepower n stuffs idk)
+- [ ] - Settings
 - ~~[ ] - Difficulty selector~~
 - ~~[ ] - More bosses~~
 
 ## Credits
-- ZUN / Team Shanghai Alice - Music & SFX (Native faith, boss death sfx, death sfx, etc.)
+- ZUN / Team Shanghai Alice - Music & SFX (Native faith, boss death sfx, player death sfx, etc.)
 - reale_ly - character decals, can be found [here](https://reale-ly.itch.io/touhou-mini-pack)
+- anonstella (me) - I made some stuffs like OC, bullets (boss and player, drops)
