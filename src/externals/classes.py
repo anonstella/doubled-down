@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
 
-        self.image = pygame.image.load('src/Char.png').convert_alpha()
+        self.image = pygame.image.load(resource_path('src/Char.png')).convert_alpha()
         self.image = pygame.transform.scale(self.image, (50, 50))
 
         self.hitbox = pygame.Rect(0, 0, 12, 12)
@@ -15,6 +15,36 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.hitbox.center = self.rect.center
+
+class BossHealthBar:
+    def __init__(self, x, y, w, h, hp):
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+        self.hp = hp
+        self.current = hp
+
+    def draw(self, surface):
+        ratio = self.current / self.hp
+        current_width = int(self.w * ratio)
+
+        bg_rect = pygame.Rect(self.x, self.y, self.w, self.h)
+        hp_rect = pygame.Rect(self.x, self.y, current_width, self.h)
+
+        pygame.draw.rect(surface, colour["white"], bg_rect)
+        pygame.draw.rect(surface, colour["red"], hp_rect)
+
+
+# class BossHealthbar(pygame.Surface):
+#     def __init__(self):
+#         super().__init__()
+
+#         self.image = pygame.Surface((240, 50))
+#         self.image = self.image.fill(colour["white"])
+
+#     def update(self):
+#         self.image = pygame.transform.scale(())
 
 class Boss(pygame.sprite.Sprite):
     def __init__(self):
@@ -35,7 +65,7 @@ class Boss_Mod(pygame.sprite.Sprite):
 
         self.metadata = metadata
         # self.image = pygame.Surface((150, 150))
-        self.image = pygame.image.load(metadata['decals'])
+        self.image = pygame.image.load(resource_path(metadata['decals']))
         self.image = pygame.transform.scale(self.image, (128, 128))
         # self.image.fill(metadata["colour"])
 
@@ -46,7 +76,7 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
 
         # self.image = pygame.Surface((20, 20))
-        self.image = pygame.image.load('src/Bullet (1).png').convert_alpha()
+        self.image = pygame.image.load(resource_path('src/Bullet (1).png')).convert_alpha()
         # self.image.fill((120, 120, 255))
         self.image = pygame.transform.scale(self.image, (10, 50))
         self.rect = self.image.get_rect(center=(x, y))
@@ -62,7 +92,7 @@ class BossBullet(pygame.sprite.Sprite):
     def __init__(self, x, y, speed_x, speed_y):
         super().__init__()
 
-        self.image = pygame.image.load('src/Boss bullet A.png').convert_alpha()
+        self.image = pygame.image.load(resource_path('src/Boss bullet A.png')).convert_alpha()
         self.image = pygame.transform.scale(self.image, (40, 40))
         self.rect = self.image.get_rect(center=(x, y))
 
@@ -77,7 +107,7 @@ class BossBulletCurve(pygame.sprite.Sprite):
     def __init__(self, x, y, speed_x, speed_y, turn_speed=1):
         super().__init__()
 
-        self.image = pygame.image.load('src/Boss bullet A.png').convert_alpha()
+        self.image = pygame.image.load(resource_path('src/Boss bullet A.png')).convert_alpha()
         self.image = pygame.transform.scale(self.image, (40, 40))
         self.rect = self.image.get_rect(center=(x, y))
 
@@ -131,7 +161,7 @@ class Bomb(pygame.sprite.Sprite):
 class Points(pygame.sprite.Sprite):
     def __init__(self, x, y, vel_x, vel_y):
         super().__init__()
-        self.image = pygame.image.load('src/points.png').convert_alpha()
+        self.image = pygame.image.load(resource_path('src/points.png')).convert_alpha()
         self.image = pygame.transform.scale(self.image, (20, 20))
         self.x = x
         self.y = y
@@ -164,7 +194,7 @@ class Points(pygame.sprite.Sprite):
 class Lives(pygame.sprite.Sprite):
     def __init__(self, x, y, vel_x, vel_y):
         super().__init__()
-        self.image = pygame.image.load('src/lives.png').convert_alpha()
+        self.image = pygame.image.load(resource_path('src/lives.png')).convert_alpha()
         self.image = pygame.transform.scale(self.image, (20, 20))
         self.x = x
         self.y = y
@@ -198,7 +228,7 @@ class Lives(pygame.sprite.Sprite):
 class Firepower(pygame.sprite.Sprite):
     def __init__(self, x, y, vel_x, vel_y):
         super().__init__()
-        self.image = pygame.image.load('src/Firepower_upgrade.png').convert_alpha()
+        self.image = pygame.image.load(resource_path('src/Firepower_upgrade.png')).convert_alpha()
         self.image = pygame.transform.scale(self.image, (20, 20))
         self.x = x
         self.y = y

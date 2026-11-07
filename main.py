@@ -1,12 +1,9 @@
 import pygame
-import random
-import math
 from src.externals.classes import *
 from src.externals.characterinit import *
 from src.externals.functions import *
 from src.externals.cfg import *
 from window.menus import *
-import time
 
 # Game idea: Doubled Down
 # Concept: A game where you have to dodge incoming drone attacks. Use your dodging skills to evade the bullets!
@@ -15,6 +12,8 @@ import time
 pygame.init()
 
 pygame.mixer.init()
+
+save = load_save()
 
 
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -32,6 +31,7 @@ player_vel_y = 0
 
 player = Player()
 
+
 # Player's bullet
 BASE_BULLET_DELAY, BOSS_SHOOT_DELAY, IMMUNITY_PERIOD = 14, 240, 1500 # milliseconds
 BULLET_DELAY = BASE_BULLET_DELAY
@@ -46,6 +46,7 @@ rotation, phase, last_phase_change = 0, 0, 0
 PHASE_PERIOD = 3000 # ms
 transition_start = 0
 phase_trans, summoned = False, False
+healthbar = BossHealthBar(0, 30, 250, 30, BOSS[phase]["health"])
 
 current_music = None
 
@@ -88,7 +89,7 @@ while True:
     # firepower update (ver. 1.4)
     BULLET_DELAY = update_firepower(BASE_BULLET_DELAY)
     # print(BULLET_DELAY)
-    print(PLR["score"], PLR["firepower_addition"], BULLET_DELAY)
+    # print(PLR["score"], PLR["firepower_addition"], BULLET_DELAY)
 
     # Border check
     keys = pygame.key.get_pressed()
@@ -155,8 +156,8 @@ while True:
         if PLR["lives"] < 1:
             game_state = 2
 
-    if phase >= len(BOSS) - 1:
-        game_state = 3
+    # if phase >= len(BOSS) - 1:
+    #     game_state = 3
     if player.rect.y <= 250: # Player on collect zone
         for item in active_drops:
             item.home_to_player(player)
@@ -168,9 +169,10 @@ while True:
     # Event handler
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            quit(0)
+            pygame.quit()
+            sys.exit(0)
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_x and PLR["bombs"] > 0:
+            if event.key == pygame.K_x and PLR["bombs"] > 0 and game_state == 1:
                 bomb = Bomb(player.rect.centerx, player.rect.centery)
                 active_bombs.add(bomb)
                 bomb_s.play()
@@ -179,58 +181,132 @@ while True:
 
             if game_state == 0: # menu
                 if event.key == pygame.K_DOWN:
-                    if menu_opt == 1:
+                    if menu_opt == 2:
                         menu_opt = 0
+                        select.play()
                     else:
-                        menu_opt = 1
+                        menu_opt += 1
+                        select.play()
 
                 if event.key == pygame.K_UP:
-                    if menu_opt == 1:
-                        menu_opt = 0
+                    if menu_opt == 0:
+                        menu_opt = 2
+                        select.play()
                     else:
-                        menu_opt = 1
+                        menu_opt -= 1
+                        select.play()
 
                 if event.key == pygame.K_z:
-                    if menu_opt == 1:
-                        quit(0)
+                    if menu_opt == 2:
+                        click.play()
+                        pygame.quit()
+                        sys.exit(0)
+                    elif menu_opt == 1:
+                        game_state = 4
+                        click.play()
                     else:
                         game_state = 1
+                        click.play()
+
             if game_state == 2:
                 if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
                     if over_opt == 1:
                         over_opt = 0
+                        select.play()
                     else:
                         over_opt = 1
+                        select.play()
 
                 if event.key == pygame.K_z:
                     if over_opt == 1:
                         game_state = 0
+                        click.play()
                     else:
                         reset_game()
                         game_state = 1
+                        click.play()
 
             if game_state == 3:
                 if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
                     if vic_opt == 1:
                         vic_opt = 0
+                        select.play()
                     else:
                         vic_opt = 1
+                        select.play()
 
                 if event.key == pygame.K_z:
                     if vic_opt == 0:
                         reset_game()
                         game_state = 1
+                        click.play()
                     else:
                         game_state = 0
+                        click.play()
+
+            if game_state == 5:
+                if event.key == pygame.K_DOWN:
+                    if settings_opt == 2:
+                        settings_opt = 0
+                        select.play()
+                    else:
+                        settings_opt += 1
+                        select.play()
+
+                if event.key == pygame.K_UP:
+                    if settings_opt == 0:
+                        settings_opt =2
+                        select.play()
+                    else:
+                        settings_opt -= 1
+                        select.play()
+
+                if event.key == pygame.K_LEFT: # reduce by .1 (equivalent to 10 when multiplied by 100)
+                    if settings_opt == 0 and temp_opt1 >= 0:
+                        temp_opt1 -= 10
+                        temp_opt1 = max(0, temp_opt1)
+                        print("music vol - 10: ", temp_opt1)
+                        music_v_test.set_volume(temp_opt1 / 100)
+                        music_v_test.play()
+                    if settings_opt == 1 and temp_opt2 >= 0:
+                        temp_opt2 -= 10
+                        temp_opt2 = max(0, temp_opt2)
+                        print("sfx vol - 10: ", temp_opt2)
+                        shoot.set_volume(temp_opt2 / 100)
+                        shoot.play()
+                if event.key == pygame.K_RIGHT:
+                    if settings_opt == 0 and temp_opt1 <= 100:
+                        temp_opt1 += 10
+                        temp_opt1 = max(0, min(100, temp_opt1))
+                        print("music vol + 10: ", temp_opt1)
+                        music_v_test.set_volume(temp_opt1 / 100)
+                        music_v_test.play()
+                    if settings_opt == 1 and temp_opt2 <= 100:
+                        temp_opt2 += 10
+                        temp_opt2 = max(0, min(100, temp_opt2))
+                        print("sfx vol + 10: ", temp_opt2)
+                        shoot.set_volume(temp_opt2 / 100)
+                        shoot.play()
+
+                if event.key == pygame.K_z:
+                    if settings_opt == 2:
+                        game_state = 0
+                        click.play()
+                    else:
+                        save["music_vol"] = temp_opt1
+                        save["sfx_vol"] = temp_opt2
+                        w_save(save)
+                        print('Saved!')
+                        click.play()
 
     active_bullets.update()
 
     desired_music = music_handler(game_state)
 
     if desired_music != current_music:
-        if not desired_music == "":
-            pygame.mixer.music.load(desired_music)
-            pygame.mixer.music.set_volume(.4)
+        if not desired_music == "" and not desired_music == None:
+            pygame.mixer.music.load(resource_path(desired_music))
+            pygame.mixer.music.set_volume(music_v)
             pygame.mixer.music.play(-1)
             current_music = desired_music
         else:
@@ -253,15 +329,16 @@ while True:
         else:
             pass
         if current_time - transition_start >= PHASE_PERIOD:
+            phase += 1
             if phase < len(BOSS):
-                BOSS[phase]["health"] = 0
-                phase += 1
+                # BOSS[phase]["health"] = 0
+                # phase += 1
                 boss = Boss_Mod(BOSS[phase])
                 phase_trans = False
                 boss_last_shot = current_time
                 summoned = False
             else:
-                pass
+                game_state = 3
 
     if game_state == 0: # Main menu
         pygame.display.set_caption("東方: Doubled Down - ver. {}".format(version))
@@ -272,18 +349,16 @@ while True:
         lives = font.render(f"Lives: {PLR["lives"]}", True, (255, 255, 255))
         lives_rect = lives.get_rect()
         lives_rect.topleft = (0, 60)
-        bhealth = font.render(f"Boss Health: {BOSS[phase]["health"] if phase < len(BOSS) else ""}", True, color=(255, 255, 255))
-        bhealth_rect = bhealth.get_rect()
-        bhealth_rect.topleft = (0, 120)
+        # bhealth = font.render(f"Boss Health: {BOSS[phase]["health"] if phase < len(BOSS) else ""}", True, color=(255, 255, 255))
+        # bhealth_rect = bhealth.get_rect()
+        # bhealth_rect.topleft = (0, 120)
         bombs_left = font.render(f"Bombs: {PLR["bombs"]}", True, (255, 255, 255))
         bombs_rect = bombs_left.get_rect()
-        bombs_rect.topleft = (0, 180)
-        stars = font.render(f"Stars: {PLR["stars"]}", True, (255, 255, 255))
-        stars_rect = stars.get_rect()
-        stars_rect.topleft = (0, 240)
+        bombs_rect.topleft = (0, 120)
         score = font.render(f"Score: {PLR["score"]}", True, colour["white"])
         scores_rect = score.get_rect()
-        scores_rect.topleft = (0, 300)
+        scores_rect.topleft = (0, 180)
+        # scores_rect.topleft = (0, 240)
         player.rect.x += player_vel_x
         player.rect.y += player_vel_y
 
@@ -291,14 +366,18 @@ while True:
             rotation, boss_last_shot = boss_logic(boss, BOSS_SHOOT_DELAY, current_time, phase, rotation, boss_last_shot)
             window.blit(boss.image, boss.rect)
 
-        # Draw thing.
+        # Update the boss's health
+        healthbar.current = BOSS[phase]["health"]
+
+        # Draw thing.  
         window.blit(player.image, player.rect)
+        healthbar.draw(window)
         pygame.draw.rect(window, (0, 255, 0), player.hitbox, 1)
-        window.blit(level, level_rect)
+        # window.blit(level, level_rect)
         window.blit(score, scores_rect)
-        window.blit(bhealth, bhealth_rect)
+        # window.blit(bhealth, bhealth_rect)
         window.blit(bombs_left, bombs_rect)
-        window.blit(stars, stars_rect)
+        # window.blit(stars, stars_rect)
         window.blit(lives, lives_rect)
     
     elif game_state == 2:
@@ -318,8 +397,15 @@ while True:
         victory(window)
         draw_selwon(vic_opt)
 
-    elif game_state == 4: # settings page
-        pass
+    elif game_state == 4:
+        # save = load_save()
+        temp_opt1 = save["music_vol"]
+        temp_opt2 = save["sfx_vol"]
+        game_state = 5
+    elif game_state == 5: # settings page
+        settings(window, temp_opt1, temp_opt2, save)
+        draw_selset(settings_opt)
+        
         
 
     active_boss_bullets.update()

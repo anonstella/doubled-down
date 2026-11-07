@@ -1,0 +1,2 @@
+pyinstaller --noconfirm --clean --onefile --windowed --name "DoubledDown" --add-data "src;src" main.py <---- use in windows build
+pyinstaller --noconfirm --clean --onefile --windowed --name "DoubledDown" --add-data "src:src" main.py <---- use in linux / macos build

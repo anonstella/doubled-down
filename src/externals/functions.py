@@ -4,6 +4,8 @@ from src.externals.characterinit import *
 from src.externals.cfg import *
 import math
 import json
+import sys
+import os
 import random
 
 # def settings_load():
@@ -14,6 +16,16 @@ import random
 
 # def apply_settings():
 #     with open('src/settings.json', 'w') as f:
+
+# Handle stuffs
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except AttributeError:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 
 def check_borders(player):
     if player.rect.y >= 630:
@@ -77,7 +89,7 @@ def shoot_spiral(boss, bullet_amt, speed, rotation):
             bullet_vy
         )
 
-        print(f"Rotation: {rotation} | VX: {bullet_vx:.2f} | VY: {bullet_vy:.2f}")
+        # print(f"Rotation: {rotation} | VX: {bullet_vx:.2f} | VY: {bullet_vy:.2f}")
         active_boss_bullets.add(bullet)
 
 def shoot_spiral_curved(boss, bullet_amt, speed, rotation):
@@ -95,7 +107,7 @@ def shoot_spiral_curved(boss, bullet_amt, speed, rotation):
             turn_speed=.5
         )
 
-        print(f"Rotation: {rotation} | VX: {bullet_vx:.2f} | VY: {bullet_vy:.2f}")
+        # print(f"Rotation: {rotation} | VX: {bullet_vx:.2f} | VY: {bullet_vy:.2f}")
         active_boss_bullets.add(bullet)
 
 def hitbox_collision(player, bullet):
@@ -106,7 +118,7 @@ def boss_logic(boss, BOSS_SHOOT_DELAY, current_time, phase, rotation, boss_last_
         # print("Starting new volley:", rotation)
         if phase < len(BOSS): 
             boss_ptn = BOSS[phase]["pattern"]
-            print("Current pattern:", boss_ptn)
+            # print("Current pattern:", boss_ptn)
             if boss_ptn == 1: # Spread
                 shoot_spread(boss, 24, 360, 7)
                 # print("Shooting spread")

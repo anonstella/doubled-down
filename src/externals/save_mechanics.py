@@ -1,4 +1,5 @@
 import os, json, pygame
+from src.externals.initializer import *
 
 def load_existing_save(f):
     with open(os.path.join(f), 'r+') as file:
@@ -7,6 +8,7 @@ def load_existing_save(f):
 
 def w_save(data):
     with open(os.path.join(os.getcwd(), 'settings.json'),  'w') as file:
+        # print('settings.json initiated save')
         json.dump(data, file)
 
 def load_save():
@@ -19,8 +21,8 @@ def load_save():
 
 def save_create():
     new_save = {
-    "music_vol": 0.4,
-    "sfx_vol": 0.6,
+    "music_vol": 40,
+    "sfx_vol": 60,
     "FPS": 120
     }
     return new_save
