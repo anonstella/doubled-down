@@ -22,7 +22,7 @@ clock = pygame.time.Clock()
 
 menu_opt, over_opt, vic_opt = 0, 0, 0
 
-game_state = 3
+game_state = 0
 
 player_x = 0
 player_y = 0
