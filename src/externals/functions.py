@@ -41,7 +41,7 @@ def get_current_time():
     return pygame.time.get_ticks()
 
 def shoot_spread(boss, bullet_amt, spread_angle, speed):
-    print("called shoot_spread.")
+    # print("called shoot_spread.")
     for i in range(bullet_amt):
 
         angle = math.radians(

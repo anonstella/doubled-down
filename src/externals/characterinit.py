@@ -16,7 +16,6 @@ VEL_MILESTONE = [
 ]
 
 BOSS = [
-    # Boss A : Sekishin
     {
         "health": 1000,
         "pattern": 4,
@@ -116,4 +115,4 @@ drops = [
 # 4 - Curved Spiral
 # 5 - User-follow
 
-print(BOSS[0])
+# print(BOSS[0])

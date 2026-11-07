@@ -1,6 +1,20 @@
 # Changelog
 This page is dedicated to logging any changes made to the game. 
 
+## Ver. 1.5a (latest) [Nov 07, 2026]
+- First release for windows, macos, and linux!
+- Updated .gitignore so the source file won't be messy
+- Moved the font file into src/ so it should be easier to modify stuffs (hopefully)
+- Settings added (only changes the value of SFX or music, nothing else yet)
+- Target-locked bullet postponed cuz I was too lazy to code it
+- Added sound effects on menu actions (eg. cursor move, option select, etc.)
+- Added health bar in replacement to the moving text
+- Settings will also change the font colour to yellow when the option is unsaved (note that pressing the save button, 'z', will save ALL the changes!)
+- ps. this is the last update for meanwhile, because of school work and stuffs, I will try my best to keep updating the game. If I have any good ideas, then I will try to do them!
+- Final touches to README.md
+- Victory and game over's main menu option now works!
+- Game over scene and victory scene remains having no music at all.
+
 ## Ver. 1.5 (latest) [Nov 07, 2026]
 - First release for windows, macos, and linux!
 - Updated .gitignore so the source file won't be messy

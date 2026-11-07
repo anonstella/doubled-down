@@ -218,12 +218,13 @@ while True:
                         select.play()
 
                 if event.key == pygame.K_z:
-                    if over_opt == 1:
-                        game_state = 0
+                    if over_opt == 0:
+                        reset_game()
+                        game_state = 1
                         click.play()
                     else:
                         reset_game()
-                        game_state = 1
+                        game_state = 0
                         click.play()
 
             if game_state == 3:
@@ -241,6 +242,7 @@ while True:
                         game_state = 1
                         click.play()
                     else:
+                        reset_game()
                         game_state = 0
                         click.play()
 
@@ -265,26 +267,26 @@ while True:
                     if settings_opt == 0 and temp_opt1 >= 0:
                         temp_opt1 -= 10
                         temp_opt1 = max(0, temp_opt1)
-                        print("music vol - 10: ", temp_opt1)
+                        #print("music vol - 10: ", temp_opt1)
                         music_v_test.set_volume(temp_opt1 / 100)
                         music_v_test.play()
                     if settings_opt == 1 and temp_opt2 >= 0:
                         temp_opt2 -= 10
                         temp_opt2 = max(0, temp_opt2)
-                        print("sfx vol - 10: ", temp_opt2)
+                        #print("sfx vol - 10: ", temp_opt2)
                         shoot.set_volume(temp_opt2 / 100)
                         shoot.play()
                 if event.key == pygame.K_RIGHT:
                     if settings_opt == 0 and temp_opt1 <= 100:
                         temp_opt1 += 10
                         temp_opt1 = max(0, min(100, temp_opt1))
-                        print("music vol + 10: ", temp_opt1)
+                        #print("music vol + 10: ", temp_opt1)
                         music_v_test.set_volume(temp_opt1 / 100)
                         music_v_test.play()
                     if settings_opt == 1 and temp_opt2 <= 100:
                         temp_opt2 += 10
                         temp_opt2 = max(0, min(100, temp_opt2))
-                        print("sfx vol + 10: ", temp_opt2)
+                        #print("sfx vol + 10: ", temp_opt2)
                         shoot.set_volume(temp_opt2 / 100)
                         shoot.play()
 
